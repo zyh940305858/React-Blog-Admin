@@ -10,3 +10,4 @@
 - [x] 完成Layout (Finish Layout)
 - [x] 页面模块 (Pages module)
     - [x] 登陆页面 (Login page)
+    - [x] 添加文章页面 (AddArticle page)
