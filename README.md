@@ -7,5 +7,6 @@
 ## 项目模块
 - [x] 项目初始化 (Project init)
 - [x] 路由搭建 (Router construct)
+- [x] 完成Layout (Finish Layout)
 - [x] 页面模块 (Pages module)
     - [x] 登陆页面 (Login page)
