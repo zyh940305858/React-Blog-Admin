@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import marked from 'marked';
 import '../static/css/AddArticle.css';
 import { Row, Col, Input, Select, Button, DatePicker } from 'antd';
+import axios from 'axios';
+import servicePath from '../config/apiUrl';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-function AddArticle() {
+function AddArticle(props) {
     const [articleId,setArticleId] = useState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
     const [articleTitle,setArticleTitle] = useState('')   //文章标题
     const [articleContent , setArticleContent] = useState('')  //markdown的编辑内容
@@ -16,7 +18,11 @@ function AddArticle() {
     const [showDate,setShowDate] = useState()   //发布日期
     const [updateDate,setUpdateDate] = useState() //修改日志的日期
     const [typeInfo ,setTypeInfo] = useState([]) // 文章类别信息
-    const [selectedType,setSelectType] = useState(1) //选择的文章类别
+    const [selectedType,setSelectType] = useState('类型') //选择的文章类别
+
+    useEffect(()=>{
+       getTypeInfo();
+    },[]);
 
     marked.setOptions({
         renderer: new marked.Renderer(),
@@ -29,16 +35,46 @@ function AddArticle() {
         smartypants: false,
     });
 
-    const changeContent = e =>{
+    const changeContent = e => {
         setArticleContent(e.target.value);
         let html = marked(e.target.value);
         setMarkdownContent(html);
     }
 
-    const changeIntroduce = e =>{
+    const changeIntroduce = e => {
         setIntroducemd(e.target.value);
         let html = marked(e.target.value);
         setIntroducehtml(html);
+    }
+
+    const getTypeInfo = () => {
+        axios.get(servicePath.getTypeInfo,{ header:{ 'Access-Control-Allow-Origin':'*' }, withCredentials:true })
+        .then(
+            res=>{
+                if (res.data.data === '没有登陆') {
+                    localStorage.removeItem('openId');
+                    props.history.push('/');
+                } else {
+                    setTypeInfo(res.data.data);
+                }
+            }
+        )
+        // axios({
+        //     method:'get',
+        //     url:servicePath.getTypeInfo,
+        //     header:{ 'Access-Control-Allow-Origin':'*' },
+        //     withCredentials: true
+        // }).then(
+        //     res=>{
+        //         if(res.data.data=="没有登录"){
+        //             localStorage.removeItem('openId')
+        //             props.history.push('/')  
+        //         }else{
+        //         setTypeInfo(res.data.data)
+        //         }
+
+        //     }
+        // )
     }
 
     return (
@@ -54,10 +90,14 @@ function AddArticle() {
                         </Col>
                         <Col span={4}>
                             &nbsp;
-                            <Select defaultValue="1" size="large">
-                                <Option value="1">随笔</Option>
-                                <Option value="2">视频</Option>
-                                <Option value="3">生活</Option>
+                            <Select defaultValue={selectedType} size="large">
+                                {
+                                    typeInfo.map((item,index) => {
+                                        return (
+                                            <Option key={index} value={item.id}>{item.typeName}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </Col>
                     </Row>
