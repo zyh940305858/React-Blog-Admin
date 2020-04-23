@@ -15,3 +15,4 @@
     - [x] Markdown预览 (Markdown preview)
     - [x] 登陆功能 (Login function)
     - [x] 导航守卫 (Navigation guard)
+    - [x] 添加文章 (Add article)
