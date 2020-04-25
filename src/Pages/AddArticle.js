@@ -97,9 +97,21 @@ function AddArticle(props) {
                 res=>{
                     setArticleId(res.data.insertId)
                     if(res.data.isSuccess){
-                        message.success('文章保存成功');
+                        message.success('文章添加成功');
                     }else{
-                        message.error('文章保存失败');
+                        message.error('文章添加失败');
+                    }
+                }
+            )
+        }else{
+            dataProps.id = articleId;
+            axios.post(servicePath.updateArticle,dataProps,{withCredentials:true})
+            .then(
+                res=>{
+                    if(res.data.isSuccess){
+                        message.success('文章保存成功')
+                    }else{
+                        message.error('文章保存失败')
                     }
                 }
             )

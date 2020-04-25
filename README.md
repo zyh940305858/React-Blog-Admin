@@ -16,3 +16,4 @@
     - [x] 登陆功能 (Login function)
     - [x] 导航守卫 (Navigation guard)
     - [x] 添加文章 (Add article)
+    - [x] 更新文章 (Update article)
